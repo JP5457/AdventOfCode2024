@@ -158,10 +158,8 @@ namespace Day6
                         List<string> temp = new List<string>(data);
                         temp[y] = setChar(x, temp[y], '#');
                         bool looped = isLoop(temp);
-                        if (looped) {
-                            Console.WriteLine("found loop at " + y + " " + x);
-                        }
                         total += looped ? 1 : 0;
+                        Console.WriteLine(looped);
                     }
                 }
             }

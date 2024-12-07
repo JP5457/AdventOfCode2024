@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace AdventOfCode
 {
@@ -6,7 +7,9 @@ namespace AdventOfCode
     {
         static void Main(string[] args)
         {
-            Day6.Day6.Task2();
+            //Stopwatch stopwatch = Stopwatch.StartNew();
+            Day7.Day7.Task2();
+            //Console.WriteLine("Task 1 took: " + stopwatch.ElapsedMilliseconds + "ms");
         }
     }
 }
