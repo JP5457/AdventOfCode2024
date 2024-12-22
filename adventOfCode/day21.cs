@@ -76,16 +76,22 @@ namespace Day21
                     }
                 }
                 int xdif = new_x - current_x;
-                bool hasblank = false;
+                int ydif = new_y - current_y;
+                bool hasblankx = false;
+                bool hasblanky = false;
                 if (xdif < 0)
                 {
-                    hasblank = numpad[current_y].Substring(new_x, (current_x - new_x)).Contains('#');
+                    hasblankx = numpad[current_y].Substring(new_x, (current_x - new_x)).Contains('#');
                 }
                 else
                 {
-                    hasblank = numpad[current_y].Substring(current_x, (new_x - current_x)).Contains('#');
+                    hasblankx = numpad[current_y].Substring(current_x, (new_x - current_x)).Contains('#');
                 }
-                if (hasblank)
+                if (ydif < 0)
+                {
+                    if (numpad[new_y][current_x] == '#') { hasblanky = true; }
+                }
+                if (hasblankx)
                 {
                     if (current_y < new_y)
                     {
@@ -104,7 +110,25 @@ namespace Day21
                         inputs += multChar('<', current_x - new_x);
                     }
                 }
-                else
+                else if (hasblanky)
+                {
+                    if (current_x > new_x)
+                    {
+                        inputs += multChar('<', current_x - new_x);
+                    }
+                    if (current_x < new_x)
+                    {
+                        inputs += multChar('>', new_x - current_x);
+                    }
+                    if (current_y < new_y)
+                    {
+                        inputs += multChar('v', new_y - current_y);
+                    }
+                    if (current_y > new_y)
+                    {
+                        inputs += multChar('^', current_y - new_y);
+                    }
+                } else
                 {
                     if (current_x > new_x)
                     {
