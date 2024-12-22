@@ -74,71 +74,67 @@ namespace Day22
             List<string> data = readFile("C:\\Users\\James\\source\\repos\\adventOfCode\\adventOfCode\\input.txt");
             long total = 0;
             int depth = 2000;
-            long best = 0;
-            List<int> best_changes = new List<int> { -9, -9, -9, -9 };
-            List<int> changesequ = new List<int> { -9, -9, -9, -9};
-            bool doloop = true;
-            while (doloop)
+            List<Dictionary<string, int>> changevalues = new List<Dictionary<string, int>>();
+            foreach (string line in data)
             {
-                int bananas = 0;
-                foreach (string line in data)
+                Dictionary<string, int> changepairs = new Dictionary<string, int>();
+                long secret = long.Parse(line);
+                int value = (int)(secret % 10);
+                List<int> changes = new List<int>();
+                for (int i = 0; i < depth; i++)
                 {
-                    long secret = long.Parse(line);
-                    int value = (int)(secret % 10);
-                    List<int> changes = new List<int>();
-                    for (int i = 0; i < depth; i++)
+                    secret = mix(secret, secret * 64);
+                    secret = prune(secret);
+                    secret = mix(secret, (long)(secret / 32));
+                    secret = prune(secret);
+                    secret = mix(secret, secret * 2048);
+                    secret = prune(secret);
+                    int newvalue = (int)(secret%10);
+                    int change = newvalue - value;
+                    changes.Add(change);
+                    value = newvalue;
+                    if (changes.Count() >= 4)
                     {
-                        secret = mix(secret, secret * 64);
-                        secret = prune(secret);
-                        secret = mix(secret, (long)(secret / 32));
-                        secret = prune(secret);
-                        secret = mix(secret, secret * 2048);
-                        secret = prune(secret);
-                        int newvalue = (int)(secret%10);
-                        int change = newvalue - value;
-                        changes.Add(change);
-                        value = newvalue;
-                        if (change == changesequ[3])
+                        string key = "";
+                        List<int> recent = changes.GetRange(changes.Count() - 4, 4);
+                        foreach(int rec in recent)
                         {
-                            if (changes.Count() >= 4)
+                            key = key + rec + ",";
+                        }
+                        if (!changepairs.ContainsKey(key)) { changepairs.Add(key, value); }
+                    }
+                }
+                changevalues.Add(changepairs);
+            }
+            int best = 0;
+            string beststr = "";
+            for (int a = -9; a <= 9; a++)
+            {
+                for (int b = -9; b <= 9; b++)
+                {
+                    for (int c = -9; c <= 9; c++)
+                    {
+                        for (int d = -9; d <= 9; d++)
+                        {
+                            int bananas = 0;
+                            string seqkey = a + "," + b + "," + c + "," + d + ",";
+                            foreach(Dictionary<string, int> chvals in changevalues)
                             {
-                                List<int> recent = changes.GetRange(changes.Count() - 4, 4);
-                                if (Enumerable.SequenceEqual(recent, changesequ))
+                                if (chvals.ContainsKey(seqkey)) 
                                 {
-                                    bananas += value;
-                                    break;
+                                    bananas += chvals[seqkey];
                                 }
+                            }
+                            if (bananas > best) { 
+                                best = bananas;
+                                beststr = seqkey;
+                                Console.WriteLine(beststr + " : " + best);
                             }
                         }
                     }
-                    total += secret;
-                }
-                if(bananas > best)
-                {
-                    best = bananas;
-                    best_changes = new List<int>(changesequ);
-                    foreach (int j in changesequ) { Console.Write(j + ","); }
-                    Console.WriteLine("had best: " + best);
-                }
-                for (int j = 3; j >= 0; j--)
-                {
-                    if (j == 0 && changesequ[j] == 9)
-                    {
-                        doloop = false;
-                    }
-                    else if (changesequ[j] < 9)
-                    {
-                        changesequ[j]++;
-                        break;
-                    }
-                    else
-                    {
-                        changesequ[j] = -9;
-                    }
                 }
             }
-            Console.WriteLine("total: " + best + " with: ");
-            foreach (int j in best_changes) { Console.Write(j + ","); }
+            Console.WriteLine("best: " + best + " with " + beststr);
         }
     }
 }
