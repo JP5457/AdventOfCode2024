@@ -7,9 +7,9 @@ namespace AdventOfCode
     {
         static void Main(string[] args)
         {
-            Stopwatch stopwatch = Stopwatch.StartNew();
-            Day22.Day22.Task2();
-            Console.WriteLine("Task 1 took: " + stopwatch.ElapsedMilliseconds + "ms");
+            //Stopwatch stopwatch = Stopwatch.StartNew();
+            Day23.Day23.Task2();
+            //Console.WriteLine("Task 1 took: " + stopwatch.ElapsedMilliseconds + "ms");
         }
     }
 }
